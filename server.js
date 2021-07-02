@@ -8,9 +8,12 @@ var express = require("express"),
     rowsController = require("./controllers/rowController"),
     placesController = require("./controllers/placeController"),
     sessionsController = require("./controllers/sessionController"),
-    app = express();
+    app = express(),
+    port = process.env.PORT || null;
+if (port === null || port === "") port = 3000;
+console.log(port);
 
-http.createServer(app).listen(3000, "0.0.0.0");
+http.createServer(app).listen(port);
 app.use(express.static(__dirname + "/client"));
 app.use('/', express.static(__dirname + "/client"));
 app.use(express.urlencoded({extended : true}));
