@@ -1,0 +1,55 @@
+.td_booked { /* забронированное место */
+    background: red;
+}
+.td_free { /* свободное место */
+    background: green;
+}
+
+body {
+    background-color: #9E7FB5;
+    font-family: Century;
+}
+
+main {
+    font-size: 24px;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    float: right;
+}
+
+.menu a {
+    background-color: transparent;
+    margin-left: 6px;
+    border-left: 4px solid black;
+    padding: 10px;
+    padding-left: 18px;
+    color: black;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.menu a:hover {
+    background-color: #C0A0E0;
+    border-left: 16px solid #222222;
+    transition: all 0.3s;
+}
+
+.menu .active {
+    background-color: #AE3EBD;
+    margin-left: 18px;
+    border-left: 4px solid black;
+    transition: all 0.3s;
+}
+
+.page {
+    display: flex;
+}
+
+.table_img {
+    width: 30%;
+    height: 60%;
+}
