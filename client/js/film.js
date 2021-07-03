@@ -12,12 +12,8 @@ let main = function () {
             });
         }
 
-        let $film, $sessions;
-
         init(function (film, sessions) {
-            $film = film;
-            $sessions = sessions;
-            $("title").text($film.name);
+            $("title").text(film.name);
         });
     });
 };
