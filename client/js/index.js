@@ -1,6 +1,5 @@
 let main = function () {
     $("document").ready(function () {
-        $("header").append($("<a>").text("PIPISKA").attr("href", "/index.html"));
         let $content = $("<div>").addClass("films");
         $.getJSON("films.json", function (films) {
             films.forEach(function (film) {
