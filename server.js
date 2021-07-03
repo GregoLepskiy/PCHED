@@ -16,6 +16,7 @@ console.log(port);
 http.createServer(app).listen(port);
 app.use(express.static(__dirname + "/client"));
 app.use('/', express.static(__dirname + "/client"));
+app.use('/films/:film_name', express.static(__dirname + "/client"));
 app.use(express.urlencoded({extended : true}));
 mongoose.connect('mongodb+srv://Irakliy:1704@cinema.x3urg.mongodb.net/myFirstDatabase', {
     useNewUrlParser : true,
@@ -35,8 +36,8 @@ app.get("/halls.json", hallsController.index);
 app.get("/:hallID/rows.json", rowsController.index);
 app.get("/places/:rowID/places.json", placesController.index);
 app.get("/:hallID/:filmID/sessions.json", sessionsController.index);
-app.get("/:hallID/sessions.json", sessionsController.index);
 app.get("/:filmID/sessions.json", sessionsController.index);
+app.get("/:hallID/sessions.json", sessionsController.index);
 app.get("/sessions.json", sessionsController.index);
 
 app.post("/clients", clientsController.create);

@@ -914,7 +914,6 @@ let main = function () {
     });
 
     $(document).ready(function () {
-        $("header").append($("<a>").text("PIPISKA").attr("href", "/index.html"));
         mainTabs.forEach(function (tab) {
             let $aElement = $("<a>").attr("href", "").text(tab.name);
             $(".menu").append($aElement);

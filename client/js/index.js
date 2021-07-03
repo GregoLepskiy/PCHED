@@ -7,11 +7,13 @@ let main = function () {
                 let $film = $("<div>").addClass("film_main"),
                     $img = $("<img>").addClass("film_img")
                         .attr("src", film.poster)
-                        .attr("alt", film.name),
+                        .attr("alt", film.name)
+                        .attr("href", "/film.html?filmID=" + film._id),
                     $img_div = $("<div>").addClass("film_img_div")
                         .append($img),
                     $film_name = $("<a>").addClass("film_name")
-                        .text(film.name),
+                        .text(film.name)
+                        .attr("href", "/film.html?filmID=" + film._id),
                     $film_rating = $("<a>").addClass("film_rating")
                         .text(film.rating),
                     $desc = $("<div>").addClass("description")
