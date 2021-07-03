@@ -358,7 +358,7 @@ let main = function () {
                            $firstTR = $("<tr>"),
                            $tdNumb = $("<td>").text("Номер"),
                            $tdPlaceCount = $("<td>").text("Количество мест"),
-                           $tdRowCount = $("<td>").text("Колчество рядов"),
+                           $tdRowCount = $("<td>").text("Количество рядов"),
                            $tdShow = $("<td>").text("Просмотр");
                        $firstTR.append($tdNumb)
                            .append($tdPlaceCount)
@@ -371,6 +371,7 @@ let main = function () {
                               $tdPlaceCount = $("<td>").text(hall.placeCount),
                               $tdRowCount = $("<td>").text(hall.rowCount),
                               $tdShow = $("<td>").attr("href", hall._id).text("Просмотр");
+                          $tdShow.addClass("show_hall");
                           console.log("hall.numb: ", hall.numb);
                           $tdShow.on("click", function () {
                               let $table = $("<table>").addClass("show_hall");

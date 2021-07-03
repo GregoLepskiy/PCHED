@@ -1,18 +1,20 @@
-.td_booked { /* забронированное место */
-    background: red;
-}
-.td_free { /* свободное место */
-    background: green;
+body {
+    background-color: #a39df6;
+    font-family: 'Old Standard TT', serif;
 }
 
-body {
-    background-color: #848CB5;
-    font-family: 'Old Standard TT', serif;
+header {
+    margin-bottom: 16px;
+    border-bottom: 6px black solid;
 }
 
 #TITLE {
     display: block;
-    margin: 30px 200px;
+    width: fit-content;
+    margin: 20px 200px;
+    border-top: 5px transparent solid;
+    border-bottom: 5px transparent solid;
+    padding-top: 10px;
     color: black;
     font-size: 48pt;
     text-decoration: none;
@@ -20,16 +22,18 @@ body {
 }
 
 #TITLE:hover {
-    text-decoration: underline;
+    border-top: 5px black solid;
+    border-bottom: 5px black solid;
     transition: all 0.3s;
 }
 
 main {
-    font-size: 24px;
+    min-width: 1372px;
+    font-size: 18pt;
 }
 
 .maincontainer {
-    width: 600px;
+    max-width: 1132px;
     float: left;
 }
 
@@ -39,33 +43,85 @@ main {
 }
 
 .tabs a {
-    background-color: transparent;
+    border-bottom: 4px transparent solid;
     padding: 6px 12px;
     color: black;
+    font-size: 20pt;
     text-decoration: none;
-    transition: all 0.3s;
+    transition: border-bottom 0.3s;
 }
 
 .tabs a:hover {
-    background-color: #C0A0E0;
-    transition: background-color 0.3s;
+    border-bottom: 4px black solid;
+    transition: border-bottom 0.3s;
 }
 
 .tabs .active {
-    background-color: #BD0118;
-    padding-top: 18px;
+    background-color: #BD002E;
+    border-radius: 12px 4px 0 0;
+    padding-top: 44px;
     color: white;
+}
+
+.content {
+    padding: 10px;
+}
+
+.show tr:first-child td {
+    background-color: #7671de;
+}
+
+.show td {
+    margin: 4px;
+    padding: 10px 16px;
+    text-align: center;
+}
+
+.show .show_hall {
+    background-color: transparent;
+    border-right: 8px transparent solid;
+    transition: all 0.3s;
+
+}
+
+.show .show_hall:hover {
+    background-color: white;
+    border-right: 8px black solid;
+    cursor: pointer;
     transition: all 0.3s;
 }
 
-.maincontainer table {
-    background-color: #7244BD;
+.show_hall_div {
+    width: 1128px;
+    height: 400px;
+}
+
+.show_hall_div .show_hall {
+    display: block;
+    margin: 10px;
+    font-size: 14pt;
+}
+
+.row_hall {
+    display: block;
+    height: 60px;
+}
+
+.place_show {
+    display: inline-block;
+    height: 42%;
+    margin: 3px;
+    border: 2px black solid;
+    border-radius: 20px 20px 12px 12px;
+    padding: 6px;
+    padding-top: 1.2%;
+    text-align: center;
 }
 
 .menu {
     display: flex;
     flex-direction: column;
-    width: 400px;
+    width: 240px;
     float: right;
 }
 
@@ -73,21 +129,22 @@ main {
     background-color: transparent;
     margin-left: 6px;
     border-left: 4px solid black;
-    padding: 10px;
+    padding: 16px;
     padding-left: 18px;
     color: black;
+    font-size: 20pt;
     text-decoration: none;
     transition: all 0.3s;
 }
 
 .menu a:hover {
-    background-color: #C0A0E0;
-    border-left: 16px solid #202020;
+    background-color: white;
+    border-left: 16px solid #252525;
     transition: all 0.3s;
 }
 
 .menu .active {
-    background-color: #7244BD;
+    background-color: #7671de;
     margin-left: 18px;
     border-left: 4px solid black;
     transition: all 0.3s;
@@ -104,4 +161,13 @@ main {
 
 .film_img {
     width: 200px;
+}
+
+.td_booked { /* забронированное место */
+    background-color: #7671de;
+    color: white;
+}
+.td_free { /* свободное место */
+    background-color: white;
+    color: black;
 }
