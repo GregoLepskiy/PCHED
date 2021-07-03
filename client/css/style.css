@@ -69,7 +69,7 @@ main {
 .menu a:hover {
     background-color: #C0A0E0;
     border-left: 16px solid #202020;
-    transition: all 0.5s;
+    transition: all 0.3s;
 }
 
 .menu .active {
