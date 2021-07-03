@@ -7,7 +7,21 @@
 
 body {
     background-color: #848CB5;
-    font-family: Century, serif;
+    font-family: 'Old Standard TT', serif;
+}
+
+#TITLE {
+    display: block;
+    margin: 30px 200px;
+    color: black;
+    font-size: 48pt;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+#TITLE:hover {
+    text-decoration: underline;
+    transition: all 0.3s;
 }
 
 main {
@@ -77,10 +91,6 @@ main {
     margin-left: 18px;
     border-left: 4px solid black;
     transition: all 0.3s;
-}
-
-.page {
-    display: flex;
 }
 
 .table_img {
