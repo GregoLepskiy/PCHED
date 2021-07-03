@@ -14,13 +14,6 @@ main {
     font-size: 24px;
 }
 
-.maincontainer {
-    width: 600px;
-    float: left;
-}
-
-
-
 .menu {
     display: flex;
     flex-direction: column;

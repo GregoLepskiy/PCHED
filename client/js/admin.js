@@ -17,11 +17,9 @@ let main = function () {
             return result;
         },
         tabFunc = function (tab, callback) {
-            let $aElement = $("<a>").attr("href", ""),
-                $spanElement = $("<span>").text(tab.name);
-            $aElement.append($spanElement);
+            let $aElement = $("<a>").attr("href", "").text(tab.name);
             $(".tabs").append($aElement);
-            $spanElement.on("click", function () {
+            $aElement.on("click", function () {
                 $(".content").html("");
                 $(".tabs a").removeClass("active");
                 $aElement.addClass("active");
@@ -916,12 +914,11 @@ let main = function () {
     });
 
     $(document).ready(function () {
+        $("header").append($("<a>").text("PIPISKA").attr("href", "/index.html"));
         mainTabs.forEach(function (tab) {
-            let $aElement = $("<a>").attr("href", ""),
-                $spanElement = $("<span>").text(tab.name);
-            $aElement.append($spanElement);
+            let $aElement = $("<a>").attr("href", "").text(tab.name);
             $(".menu").append($aElement);
-            $spanElement.on("click", function () {
+            $aElement.on("click", function () {
                 $(".content").html("");
                 $(".show_hall_div").html("");
                 $(".menu a").removeClass("active");
