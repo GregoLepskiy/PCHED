@@ -53,3 +53,11 @@ main {
     width: 30%;
     height: 60%;
 }
+
+.film_main {
+    display: flex;
+}
+
+.film_img {
+    width: 200px;
+}
