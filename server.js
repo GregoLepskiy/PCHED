@@ -56,3 +56,4 @@ app.delete("/halls/:id", hallsController.destroy);
 
 app.put("/clients/:email", clientsController.update);
 app.put("/films/:id", filmsController.update);
+app.put("/workers/:id", workersController.update);

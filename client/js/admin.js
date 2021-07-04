@@ -541,6 +541,7 @@ let main = function () {
                             .append($tdPlaceCount)
                             .append($tdRowCount)
                             .append($tdShow);
+                        $(".show_hall_div").html("");
                         $content.append($firstTR);
                         halls.forEach(function (hall) {
                             let $tr = $("<tr>"),
@@ -1066,6 +1067,80 @@ let main = function () {
                         });
                     });
                     callback(null, $delete);
+                }
+            });
+            tabs.push({
+                "name" : "Изменить",
+                "content" : function (callback) {
+                    $.getJSON("workers.json", function (workers) {
+                        let $content = $("<table>").addClass("show"),
+                            $firstTR = $("<tr>"),
+                            $tdSurname = $("<td>").text("Фамилия"),
+                            $tdName = $("<td>").text("Имя"),
+                            $tdPatronymic = $("<td>").text("Отчество"),
+                            $tdPosition = $("<td>").text("Должность"),
+                            $tdRole = $("<td>").text("Роль"),
+                            $tdSalary = $("<td>").text("Зарплата"),
+                            $tdAccept = $("<td>");
+                        $firstTR.append($tdSurname)
+                            .append($tdName)
+                            .append($tdPatronymic)
+                            .append($tdPosition)
+                            .append($tdRole)
+                            .append($tdSalary)
+                            .append($tdAccept);
+                        $content.append($firstTR);
+                        workers.forEach(function (worker) {
+                            let $tr = $("<tr>").data("id", worker._id),
+                                $inSurname = $("<input>").val(worker.surname),
+                                $tdSurname = $("<td>").append($inSurname),
+                                $inName = $("<input>").val(worker.name),
+                                $tdName = $("<td>").append($inName),
+                                $inPatronymic = $("<input>").val(worker.patronymic),
+                                $tdPatronymic = $("<td>").append($inPatronymic),
+                                $inPosition = $("<input>").val(worker.position),
+                                $tdPosition = $("<td>").append($inPosition),
+                                $inRole = $("<input>").val(worker.role),
+                                $tdRole = $("<td>").append($inRole),
+                                $inSalary = $("<input>").val(worker.salary),
+                                $tdSalary = $("<td>").append($inSalary),
+                                $accept = $("<button>").addClass("accept").text("Изменить");
+                            $accept.click(function () {
+                                let name = $inName.val(),
+                                    surname = $inSurname.val(),
+                                    patronymic = $inPatronymic.val(),
+                                    position = $inPosition.val(),
+                                    role = $inRole.val(),
+                                    salary = $inSalary.val(),
+                                    id = $tr.data("id");
+                                $.ajax({
+                                    url : "/workers/" + id,
+                                    type : "PUT",
+                                    data : {
+                                        "name" : name,
+                                        "surname" : surname,
+                                        "patronymic" : patronymic,
+                                        "position" : position,
+                                        "role" : role,
+                                        "salary" : salary
+                                    }
+                                }).done(function (response) {
+                                    console.log(response);
+                                }).fail(function (err) {
+                                    console.log(err);
+                                })
+                            });
+                            $tr.append($tdSurname)
+                                .append($tdName)
+                                .append($tdPatronymic)
+                                .append($tdPosition)
+                                .append($tdRole)
+                                .append($tdSalary)
+                                .append($accept);
+                            $content.append($tr);
+                        });
+                        callback(null, $content);
+                    });
                 }
             })
             for (let tab of tabs)

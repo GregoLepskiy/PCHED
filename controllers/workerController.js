@@ -86,6 +86,30 @@ WorkerController.destroy = function (req, res) {
     });
 };
 
+WorkerController.update = function (req, res) {
+    console.log(this.name);
+    let id = req.params.id,
+        newWorkerData = {
+            $set: {
+                "name" : req.body.name,
+                "surname" : req.body.surname,
+                "patronymic" : req.body.patronymic,
+                "position" : req.body.position,
+                "role" : req.body.role,
+                "salary" : req.body.salary
+            }
+        };
+    Worker.updateOne({"_id" : id}, newWorkerData, function (err, worker) {
+        if (err) res.status(500).json(err);
+        else {
+            if (worker.n === 1 && worker.nModified === 1 && worker.ok === 1) {
+                console.log("CHANGED");
+                res.status(200).json(worker);
+            } else res.status(404).json("NOT FOUND");
+        }
+    });
+};
+
 //TODO : WORKERCONTROLLER
 
 module.exports = WorkerController;
