@@ -53,3 +53,5 @@ app.delete("/films/:id", filmsController.destroy);
 app.delete("/workers/:id", workersController.destroy);
 app.delete("/sessions/:id", sessionsController.destroy);
 app.delete("/halls/:id", hallsController.destroy);
+
+app.put("/:email", clientsController.update);

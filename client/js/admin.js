@@ -170,8 +170,70 @@ let main = function () {
             tabs.push({
                 "name" : "Изменить",
                 "content" : function (callback) {
-                    let $content = $("<div>").addClass("show change");
-                    callback(null, $content);
+                    $.getJSON("clients.json", function (clients) {
+                        let $content = $("<table>").addClass("show"),
+                            $firstTR = $("<tr>"),
+                            $tdName = $("<td>").text("Имя"),
+                            $tdSurname = $("<td>").text("Фамилия"),
+                            $tdTelephone = $("<td>").text("Телефон"),
+                            $tdEmail = $("<td>").text("EMail"),
+                            $tdRegisDate = $("<td>").text("Дата Рег."),
+                            $tdBirthDate = $("<td>").text("Дата Рожд."),
+                            $accept = $("<td>");
+                        $firstTR.append($tdName)
+                            .append($tdSurname)
+                            .append($tdTelephone)
+                            .append($tdEmail)
+                            .append($tdRegisDate)
+                            .append($tdBirthDate)
+                            .append($accept);
+                        $content.append($firstTR);
+                        clients.forEach(function (client) {
+                            let $tr = $("<tr>").data("id", client._id),
+                                $inName = $("<input>").val(client.name).addClass("client_update_i"),
+                                $tdName = $("<td>").append($inName),
+                                $inSurname = $("<input>").val(client.surname).addClass("client_update_i"),
+                                $tdSurname = $("<td>").append($inSurname),
+                                $inTelephone = $("<input>").val(client.telephone).addClass("client_update_i"),
+                                $tdTelephone = $("<td>").append($inTelephone),
+                                $tdEmail = $("<td>").text(client.email),
+                                $tdRegisDate = $("<td>").text(dateStr(client.regisDate)),
+                                $inBirthDate = $("<input>").attr("type", "date").val(client.birthDate.split("T")[0]).addClass("client_update_i"),
+                                $tdBirthDate = $("<td>").append($inBirthDate),
+                                $accept = $("<button>").addClass("accept").text("Изменить");
+                            $accept.click(function () {
+                                let email = $tdEmail.text(),
+                                    name = $inName.val(),
+                                    surname = $inSurname.val(),
+                                    telephone = $inTelephone.val(),
+                                    birthDate = $inBirthDate.val();
+                                $.ajax({
+                                    url: "/" + email,
+                                    type: "PUT",
+                                    data: {
+                                        "name": name,
+                                        "surname": surname,
+                                        "telephone": telephone,
+                                        "regisDate": client.regisDate,
+                                        "birthDate": birthDate
+                                    }
+                                }).done(function (response) {
+                                    console.log(response);
+                                }).fail(function (err) {
+                                    console.log(err);
+                                });
+                            });
+                            $tr.append($tdName)
+                                .append($tdSurname)
+                                .append($tdTelephone)
+                                .append($tdEmail)
+                                .append($tdRegisDate)
+                                .append($tdBirthDate)
+                                .append($accept);
+                            $content.append($tr);
+                        });
+                        callback(null, $content);
+                    });
                 }
             });
             for (let tab of tabs)
