@@ -208,7 +208,7 @@ let main = function () {
                                     telephone = $inTelephone.val(),
                                     birthDate = $inBirthDate.val();
                                 $.ajax({
-                                    url: "/" + email,
+                                    url: "/clients/" + email,
                                     type: "PUT",
                                     data: {
                                         "name": name,
@@ -410,6 +410,114 @@ let main = function () {
                     callback(null, $delete);
                 }
             });
+            tabs.push({
+                "name" : "Изменить",
+                "content" : function (callback) {
+                    $.getJSON("films.json", function (films) {
+                        let $content = $("<table>").addClass("show"),
+                            $firstTR = $("<tr>"),
+                            $tdName = $("<td>").text("Название"),
+                            $tdGenre = $("<td>").text("Жанр"),
+                            $tdDirector = $("<td>").text("Режиссер"),
+                            $tdStudio = $("<td>").text("Студия"),
+                            $tdSynopsis = $("<td>").text("Синопсис"),
+                            $tdPoster = $("<td>").text("Постер"),
+                            $tdActors = $("<td>").text("Актеры"),
+                            $tdRating = $("<td>").text("Рейтинг"),
+                            $tdAge = $("<td>").text("Возр. огр."),
+                            $tdAccept = $("<td>");
+                        $firstTR.append($tdName)
+                            .append($tdGenre)
+                            .append($tdDirector)
+                            .append($tdStudio)
+                            .append($tdSynopsis)
+                            .append($tdPoster)
+                            .append($tdActors)
+                            .append($tdRating)
+                            .append($tdAge)
+                            .append($tdAccept);
+                        $content.append($firstTR);
+                        films.forEach(function (film) {
+                            let $tr = $("<tr>").data("id", film._id),
+                                $inName = $("<input>").val(film.name).addClass("films_update_i"),
+                                $tdName = $("<td>").append($inName),
+                                $inGenre = $("<input>").val(function () {
+                                    let result = "";
+                                    film.genre.forEach(function (genre) {
+                                        result += genre + ',';
+                                    });
+                                    return result.substr(0, result.length - 1);
+                                }).addClass("films_update_i"),
+                                $tdGenre = $("<td>").append($inGenre),
+                                $inDirector = $("<input>").val(film.director).addClass("films_update_i"),
+                                $tdDirector = $("<td>").append($inDirector),
+                                $inStudio = $("<input>").val(film.studio).addClass("films_update_i"),
+                                $tdStudio = $("<td>").append($inStudio),
+                                $inSynopsis = $("<input>").val(film.synopsis).addClass("films_update_i"),
+                                $tdSynopsis = $("<td>").append($inSynopsis),
+                                $inPoster = $("<input>").val(film.poster).addClass("films_update_i"),
+                                $tdPoster = $("<td>").append($inPoster),
+                                $inActors = $("<input>").val(function () {
+                                    let result = "";
+                                    film.actors.forEach(function (actor) {
+                                        result += actor + ',';
+                                    });
+                                    return result.substr(0, result.length - 1);
+                                }).addClass("films_update_i"),
+                                $tdActors = $("<td>").append($inActors),
+                                $inRating = $("<input>").val(film.rating).addClass("films_update_i"),
+                                $tdRating = $("<td>").append($inRating),
+                                $inAge = $("<input>").val(film.age).addClass("films_update_i"),
+                                $tdAge = $("<td>").append($inAge),
+                                $accept = $("<button>").addClass("accept").text("Изменить");
+                            $accept.click(function () {
+                                let name = $inName.val(),
+                                    genre = $inGenre.val().split(','),
+                                    director = $inDirector.val(),
+                                    studio = $inStudio.val(),
+                                    synopsis = $inSynopsis.val(),
+                                    poster = $inPoster.val(),
+                                    actors = $inActors.val().split(','),
+                                    rating = Number($inRating.val()),
+                                    age = Number($inAge.val()),
+                                    id = $tr.data("id");
+                                $.ajax({
+                                    url: "/films/" + id,
+                                    type: "PUT",
+                                    data: {
+                                        "name" : name,
+                                        "genre" : genre,
+                                        "director" : director,
+                                        "studio" : studio,
+                                        "synopsis" : synopsis,
+                                        "poster" : poster,
+                                        "actors" : actors,
+                                        "rating" : rating,
+                                        "age" : age
+                                    }
+                                }).done(function (response) {
+                                    console.log(response);
+                                }).fail(function (err) {
+                                    console.log(err);
+                                });
+                            });
+                            console.log(film.name);
+                            $tr.append($tdName)
+                                .append($tdGenre)
+                                .append($tdDirector)
+                                .append($tdStudio)
+                                .append($tdSynopsis)
+                                .append($tdPoster)
+                                .append($tdActors)
+                                .append($tdRating)
+                                .append($tdAge)
+                                .append($accept);
+                            $content.append($tr);
+                        });
+                        callback(null, $content);
+                    });
+                }
+            })
             for (let tab of tabs)
                 tabFunc(tab, callback);
         }
@@ -606,7 +714,8 @@ let main = function () {
                                             });
                                         $.post("places", newPlace, function (place) {
                                             console.log(place);
-                                            $(".progress_hall").attr("value", $(".progress_hall").attr("value") + 1);
+                                            value++;
+                                            $(".progress_hall").attr("value", value);
                                         });
                                     }
                                 });
