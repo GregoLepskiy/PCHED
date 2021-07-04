@@ -167,6 +167,13 @@ let main = function () {
                     callback(null, $delete);
                 }
             });
+            tabs.push({
+                "name" : "Изменить",
+                "content" : function (callback) {
+                    let $content = $("<div>").addClass("show change");
+                    callback(null, $content);
+                }
+            });
             for (let tab of tabs)
                 tabFunc(tab, callback);
        }
@@ -354,53 +361,67 @@ let main = function () {
                 "name" : "Просмотр",
                 "content" : function (callback) {
                     $.getJSON("halls.json", function (halls) {
-                       let $content = $("<table>").addClass("show"),
-                           $firstTR = $("<tr>"),
-                           $tdNumb = $("<td>").text("Номер"),
-                           $tdPlaceCount = $("<td>").text("Количество мест"),
-                           $tdRowCount = $("<td>").text("Количество рядов"),
-                           $tdShow = $("<td>").text("Просмотр");
-                       $firstTR.append($tdNumb)
-                           .append($tdPlaceCount)
-                           .append($tdRowCount)
-                           .append($tdShow);
-                       $content.append($firstTR);
-                       halls.forEach(function (hall) {
-                          let $tr = $("<tr>"),
-                              $tdNumb = $("<td>").text(hall.numb),
-                              $tdPlaceCount = $("<td>").text(hall.placeCount),
-                              $tdRowCount = $("<td>").text(hall.rowCount),
-                              $tdShow = $("<td>").attr("href", hall._id).text("Просмотр");
-                          $tdShow.addClass("show_hall");
-                          console.log("hall.numb: ", hall.numb);
-                          $tdShow.on("click", function () {
-                              let $table = $("<table>").addClass("show_hall");
-                              $.getJSON("" + hall._id + "/rows.json", function (rows) {
-                                  rows.forEach(function (row) {
-                                     let $row = $("<tr>").addClass("row_hall");
-                                     $.getJSON("places/" + row._id + "/places.json", function (places) {
-                                        console.log(places);
-                                        places.forEach(function (place) {
-                                            console.log(place.price);
-                                            let $td = $("<td>").addClass("place_show");
-                                            $td.text(place.price);
-                                            $td.toggleClass(place.reservation ? 'td_booked' : 'td_free');
-                                            $row.append($td);
+                        let $content = $("<table>").addClass("show"),
+                            $firstTR = $("<tr>"),
+                            $tdNumb = $("<td>").text("Номер"),
+                            $tdPlaceCount = $("<td>").text("Количество мест"),
+                            $tdRowCount = $("<td>").text("Количество рядов"),
+                            $tdShow = $("<td>").text("Просмотр");
+                        $firstTR.append($tdNumb)
+                            .append($tdPlaceCount)
+                            .append($tdRowCount)
+                            .append($tdShow);
+                        $content.append($firstTR);
+                        halls.forEach(function (hall) {
+                            let $tr = $("<tr>"),
+                                $tdNumb = $("<td>").text(hall.numb),
+                                $tdPlaceCount = $("<td>").text(hall.placeCount),
+                                $tdRowCount = $("<td>").text(hall.rowCount),
+                                $tdShow = $("<td>").attr("href", hall._id).text("Просмотр");
+                            $tdShow.addClass("show_hall");
+                            console.log("hall.numb: ", hall.numb);
+                            $tdShow.on("click", function () {
+                                let $table = $("<table>").addClass("show_hall"),
+                                    value = 0,
+                                    $progress = $("<progress>").addClass("progress_hall").attr("max", hall.placeCount).attr("value", value);
+                                $(".progress_hall").remove();
+                                $(".content").append($progress);
+                                $.getJSON("" + hall._id + "/rows.json", function (rows) {
+                                    for (let i = 1; i <= hall.rowCount; i++) {
+                                        rows.forEach(function (row) {
+                                            if (row.number === i) {
+                                                let $row = $("<tr>").addClass("row_hall");
+                                                $.getJSON("places/" + row._id + "/places.json", function (places) {
+                                                    console.log(places);
+                                                    for (let j = 1; j <= row.placeCount; j++) {
+                                                        places.forEach(function (place) {
+                                                            if (place.number === j) {
+                                                                console.log(place.price);
+                                                                let $td = $("<td>").addClass("place_show");
+                                                                $td.text(place.price);
+                                                                $td.toggleClass(place.reservation ? 'td_booked' : 'td_free');
+                                                                value++;
+                                                                $progress.attr("value", value);
+                                                                $row.append($td);
+                                                            }
+                                                        });
+                                                    }
+                                                });
+                                                $table.append($row);
+                                            }
                                         });
-                                     });
-                                     $table.append($row);
-                                  });
-                              });
-                              $(".show_hall_div").html("").append($table);
-                              //TODO: function for show hall
-                          });
-                          $tr.append($tdNumb)
-                              .append($tdPlaceCount)
-                              .append($tdRowCount)
-                              .append($tdShow);
-                          $content.append($tr);
-                       });
-                       callback(null, $content);
+                                    }
+                                });
+                                $(".show_hall_div").html("").append($table);
+                                //TODO: function for show hall
+                            });
+                            $tr.append($tdNumb)
+                                .append($tdPlaceCount)
+                                .append($tdRowCount)
+                                .append($tdShow);
+                            $content.append($tr);
+                        });
+                        callback(null, $content);
                     });
                 }
             });
@@ -596,81 +617,48 @@ let main = function () {
             tabs.push({
                 "name" : "Просмотр",
                 "content" : function (callback) {
-                    let $sesShowDiv = $("<div>").addClass("ses_show_div"),
-                        $sesTabs = $("<div>").addClass("ses_tabs"),
-                        $sesContent = $("<div>").addClass("ses_content"),
-                        sesTabs = [],
-                        tabFunc = function (tab, callback) {
-                            let $aElement = $("<a>").attr("href", ""),
-                                $spanElement = $("<span>").text(tab.name);
-                            $aElement.append($spanElement);
-                            $(".ses_tabs").append($aElement);
-                            $spanElement.on("click", function () {
-                                $(".ses_content").html("");
-                                $(".ses_tabs a span").removeClass("active");
-                                $spanElement.addClass("active");
-                                tab.content(function (err, $content) {
-                                    if (err !== null) {
-                                        alert("ERROR");
-                                    } else {
-                                        callback(null, $content);
-                                    }
+                    $.getJSON("sessions.json", function (sessions) {
+                        let $table = $("<table>").addClass("show"),
+                            $firstTR = $("<tr>"),
+                            $tdHall = $("<td>").text("Зал"),
+                            $tdFilm = $("<td>").text("Фильм"),
+                            $tdTime = $("<td>").text("Время"),
+                            filmName = function (films, session) {
+                                let result = "-1";
+                                films.forEach(function (film) {
+                                    if (film._id === session.filmID) result = film.name;
                                 });
-                                return false;
+                                return result;
+                            },
+                            hallNumb = function (halls, session) {
+                                let result = -2;
+                                halls.forEach(function (hall) {
+                                    if (hall._id === session.hallID) result = hall.numb;
+                                });
+                                return result;
+                            };
+                        $firstTR.append($tdHall)
+                            .append($tdFilm)
+                            .append($tdTime);
+                        $table.append($firstTR);
+                        $.getJSON("halls.json", function (halls) {
+                            $.getJSON("films.json", function (films) {
+                                sessions.forEach(function (session) {
+                                    let fName = filmName(films, session),
+                                        hNumb = hallNumb(halls, session),
+                                        $TR = $("<tr>"),
+                                        $tdHall = $("<td>").text(hNumb),
+                                        $tdFilm = $("<td>").text(fName),
+                                        $tdTime = $("<td>").text(session.time);
+                                    $TR.append($tdHall)
+                                        .append($tdFilm)
+                                        .append($tdTime);
+                                    $table.append($TR);
+                                });
                             });
-                        };
-                    $sesShowDiv.append($sesTabs).append($sesContent);
-                    $(".content").append($sesShowDiv);
-                    sesTabs.push({
-                       "name" : "Все",
-                       "content" : function (callback) {
-                           $(".ses_content").html("");
-                           $(".show").remove();
-                           $.getJSON("sessions.json", function (sessions) {
-                               let $table = $("<table>").addClass("show"),
-                                   $firstTR = $("<tr>"),
-                                   $tdHall = $("<th>").text("Зал"),
-                                   $tdFilm = $("<th>").text("Фильм"),
-                                   $tdTime = $("<th>").text("Время"),
-                                   filmName = function (films, session) {
-                                       let result = "-1";
-                                       films.forEach(function (film) {
-                                           if (film._id === session.filmID) result = film.name;
-                                       });
-                                       return result;
-                                   },
-                                   hallNumb = function (halls, session) {
-                                       let result = -2;
-                                       halls.forEach(function (hall) {
-                                           if (hall._id === session.hallID) result = hall.numb;
-                                       });
-                                       return result;
-                                   };
-                               $firstTR.append($tdHall)
-                                   .append($tdFilm)
-                                   .append($tdTime);
-                               $table.append($firstTR);
-                               $.getJSON("halls.json", function (halls) {
-                                  $.getJSON("films.json", function (films) {
-                                     sessions.forEach(function (session) {
-                                         let fName = filmName(films, session),
-                                             hNumb = hallNumb(halls, session),
-                                             $TR = $("<tr>"),
-                                             $tdHall = $("<td>").text(hNumb),
-                                             $tdFilm = $("<td>").text(fName),
-                                             $tdTime = $("<td>").text(session.time);
-                                         $TR.append($tdHall)
-                                             .append($tdFilm)
-                                             .append($tdTime);
-                                         $table.append($TR);
-                                     });
-                                  });
-                               });
-                               callback(null, $table);
-                           });
-                       }
+                        });
+                        callback(null, $table);
                     });
-                    for (let tab of sesTabs) tabFunc(tab, callback);
                 }
             });
             tabs.push({
