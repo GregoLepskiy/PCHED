@@ -93,15 +93,19 @@ FilmController.create = function (req, res) {
 
 FilmController.update = function (req, res) {
     console.log(this.name);
-    let newFilm = {$set : {name : req.body.name,
-        genre : req.body.genre,
-        director : req.body.director,
-        studio : req.body.studio,
-        synopsis : req.body.synopsis,
-        poster : req.body.poster,
-        actors : req.body.actors,
-        rating : req.body.rating,
-        age : req.body.age}};
+    let newFilm = {
+        $set: {
+            name: req.body.name,
+            genre: req.body.genre,
+            director: req.body.director,
+            studio: req.body.studio,
+            synopsis: req.body.synopsis,
+            poster: req.body.poster,
+            actors: req.body.actors,
+            rating: req.body.rating,
+            age: req.body.age
+        }
+    };
     Film.updateOne({"_id" : req.params.id}, newFilm, function (err, film) {
         if (err) res.status(500).json(err);
         else {
