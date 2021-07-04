@@ -1,7 +1,6 @@
 let mongoose = require("mongoose"),
     ObjectID = mongoose.Schema.Types.ObjectId,
     PlaceSchema = mongoose.Schema({
-        type : String,
         price : Number,
         reservation : Boolean,
         number : Number,

@@ -29,12 +29,10 @@ PlaceController.index = function (req, res) {
 
 PlaceController.create = function (req, res) {
     let rowID = req.body.rowID,
-        type = req.body.type,
         price = req.body.price,
         reservation = req.body.reservation,
         number = req.body.number,
         newPlace = new Place({
-            "type" : type,
             "price" : price,
             "reservation" : reservation,
             "number" : number,

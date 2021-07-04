@@ -62,6 +62,64 @@ let main = function () {
                     callback(null, $content);
                 }
             });
+            tabs.push({
+                "name" : function () {
+                    let date = new Date(),
+                        result,
+                        month = function () {
+                            let result = String(date.getMonth() + 1);
+                            if (result.length === 1) result = '0' + result;
+                            return result;
+                        },
+                        day = date.getDate() + 1;
+
+                    result = day + '.' + month();
+                    return result;
+                },
+                "content" : function (callback) {
+                    let $content = $("<div>").addClass("sessions_content");
+                    sessions.sort(function (a, b) {
+                        if (a.time > b.time) return 1;
+                        else if (b.time > a.time) return -1;
+                        else return 0;
+                    });
+                    sessions.forEach(function (session) {
+                        let $sessionTime = $("<button>").addClass("session_but");
+                        $sessionTime.text(session.time);
+                        $content.append($sessionTime);
+                    });
+                    callback(null, $content);
+                }
+            });
+            tabs.push({
+                "name" : function () {
+                    let date = new Date(),
+                        result,
+                        month = function () {
+                            let result = String(date.getMonth() + 1);
+                            if (result.length === 1) result = '0' + result;
+                            return result;
+                        },
+                        day = date.getDate() + 2;
+
+                    result = day + '.' + month();
+                    return result;
+                },
+                "content" : function (callback) {
+                    let $content = $("<div>").addClass("sessions_content");
+                    sessions.sort(function (a, b) {
+                        if (a.time > b.time) return 1;
+                        else if (b.time > a.time) return -1;
+                        else return 0;
+                    });
+                    sessions.forEach(function (session) {
+                        let $sessionTime = $("<button>").addClass("session_but");
+                        $sessionTime.text(session.time);
+                        $content.append($sessionTime);
+                    });
+                    callback(null, $content);
+                }
+            });
             tabs.forEach(function (tab) {
                 let $aElement = $("<a>").attr("href", "")
                     .text(tab.name);
@@ -77,8 +135,8 @@ let main = function () {
                     return false;
                 });
             });
+            $(".tabs_sessions a:first-child").trigger("click");
         });
-        $(".tabs_sessions:first-child").trigger("click");
     });
 };
 

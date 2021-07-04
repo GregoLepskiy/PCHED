@@ -101,6 +101,25 @@ SessionController.destroy = function (req, res) {
     });
 };
 
+SessionController.update = function (req, res) {
+    console.log(this.name);
+    let id = req.params.id,
+        newSessionData = {
+            $set: {
+                time : req.body.time
+            }
+        };
+    Session.updateOne({"_id" : id}, newSessionData, function (err, session) {
+        if (err) res.status(500).json(err);
+        else {
+            if (session.n === 1 && session.nModified === 1 && session.ok === 1) {
+                console.log("CHANGED");
+                res.status(200).json(session);
+            } else res.status(404).json("NOT FOUND");
+        }
+    });
+};
+
 //TODO: sessionController
 
 module.exports = SessionController;

@@ -1,6 +1,7 @@
 let Hall = require("../models/hall"),
     Row = require("../models/row"),
     Place = require("../models/place"),
+    Session = require("../models/session"),
     HallController = {};
 
 Hall.find({}, function (err, result) {
@@ -70,6 +71,11 @@ HallController.destroy = function (req, res) {
                             function (err, place) {
                                 console.log(place);
                             });
+                        Session.deleteMany({
+                            "hallID": id
+                        }, function (err, session) {
+                            console.log(session);
+                        });
                         Hall.deleteOne({"_id" : id},
                             function (err, hall) {
                                 if (err) res.status(500).json(err);

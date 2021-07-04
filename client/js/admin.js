@@ -622,16 +622,11 @@ let main = function () {
                         },
                         place_td = function (i, j, price, type) {
                             let $m_place = $("<div>").addClass("m_place").data("number", j),
-                                $m_place_price = $("<input>").addClass("m_place_price").val(price).data("price", price).attr("id", "mpp" + i + "" + j),
-                                $m_place_type = $("<input>").addClass("m_place_type").val(type).data("type", type).attr("id", "mpt" + i + "" + j);
-                            $m_place.append($m_place_price).append($m_place_type);
+                                $m_place_price = $("<input>").addClass("m_place_price").val(price).data("price", price).attr("id", "mpp" + i + "" + j);
+                            $m_place.append($m_place_price);
                             $m_place_price.change(function () {
                                 $(this).data("price", Number($(this).val()));
                                 console.log($(this).data("price"));
-                            });
-                            $m_place_type.change(function () {
-                                $(this).data("type", $(this).val());
-                                console.log($(this).data("type"));
                             });
                             return $m_place;
                         },
@@ -703,11 +698,9 @@ let main = function () {
                                     for (let j = 1; j <= placeRowCount; j++) {
                                         let reservation = false,
                                             placeNumb = j,
-                                            type = $("#mpt" + (rowNumb - 1) + "" + j).data("type"),
                                             price = $("#mpp" + (rowNumb - 1) + "" + j).data("price"),
                                             rowID = row._id,
                                             newPlace = ({
-                                                "type" : type,
                                                 "price" : price,
                                                 "reservation" : reservation,
                                                 "number" : placeNumb,
@@ -773,6 +766,7 @@ let main = function () {
                                 '<option value="' + hall._id + '">' + hall.numb + '</option>'
                             );
                         });
+                        $(".show_hall_div").html("");
                         callback(null, $delete);
                     });
                 }
@@ -929,6 +923,73 @@ let main = function () {
                             });
                         });
                         callback(null, $delete);
+                    });
+                }
+            });
+            tabs.push({
+                "name" : "Изменить",
+                "content" : function (callback) {
+                    $.getJSON("sessions.json", function (sessions) {
+                        let $table = $("<table>").addClass("show"),
+                            $firstTR = $("<tr>"),
+                            $tdHall = $("<td>").text("Зал"),
+                            $tdFilm = $("<td>").text("Фильм"),
+                            $tdTime = $("<td>").text("Время"),
+                            $tdAccept = $("<td>"),
+                            filmName = function (films, session) {
+                                let result = "-1";
+                                films.forEach(function (film) {
+                                    if (film._id === session.filmID) result = film.name;
+                                });
+                                return result;
+                            },
+                            hallNumb = function (halls, session) {
+                                let result = -2;
+                                halls.forEach(function (hall) {
+                                    if (hall._id === session.hallID) result = hall.numb;
+                                });
+                                return result;
+                            };
+                        $firstTR.append($tdHall)
+                            .append($tdFilm)
+                            .append($tdTime)
+                            .append($tdAccept);
+                        $table.append($firstTR);
+                        $.getJSON("halls.json", function (halls) {
+                            $.getJSON("films.json", function (films) {
+                                sessions.forEach(function (session) {
+                                    let fName = filmName(films, session),
+                                        hNumb = hallNumb(halls, session),
+                                        $TR = $("<tr>").data("id", session._id),
+                                        $tdHall = $("<td>").text(hNumb),
+                                        $tdFilm = $("<td>").text(fName),
+                                        $inTime = $("<input>").val(session.time),
+                                        $tdTime = $("<td>").append($inTime),
+                                        $accept = $("<button>").addClass("accept").text("Изменить");
+                                    $accept.click(function () {
+                                        let time = $inTime.val(),
+                                            id = $TR.data("id");
+                                        $.ajax({
+                                            url : "/sessions/" + id,
+                                            type : "PUT",
+                                            data : {
+                                                "time" : time
+                                            }
+                                        }).done(function (response) {
+                                            console.log(response);
+                                        }).fail(function (err) {
+                                            console.log(err);
+                                        })
+                                    });
+                                    $TR.append($tdHall)
+                                        .append($tdFilm)
+                                        .append($tdTime)
+                                        .append($accept);
+                                    $table.append($TR);
+                                });
+                            });
+                        });
+                        callback(null, $table);
                     });
                 }
             })
