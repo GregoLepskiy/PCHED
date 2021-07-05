@@ -58,3 +58,4 @@ app.put("/clients/:email", clientsController.update);
 app.put("/films/:id", filmsController.update);
 app.put("/workers/:id", workersController.update);
 app.put("/sessions/:id", sessionsController.update);
+app.put("/places/:id", placesController.update);

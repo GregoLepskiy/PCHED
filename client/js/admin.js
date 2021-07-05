@@ -771,6 +771,91 @@ let main = function () {
                     });
                 }
             });
+            tabs.push({
+                "name" : "Изменить",
+                "content" : function (callback) {
+                    $.getJSON("halls.json", function (halls) {
+                        let $content = $("<table>").addClass("show"),
+                            $firstTR = $("<tr>"),
+                            $tdNumb = $("<td>").text("Номер"),
+                            $tdPlaceCount = $("<td>").text("Количество мест"),
+                            $tdRowCount = $("<td>").text("Количество рядов"),
+                            $tdShow = $("<td>").text("Просмотр");
+                        $firstTR.append($tdNumb)
+                            .append($tdPlaceCount)
+                            .append($tdRowCount)
+                            .append($tdShow);
+                        $(".show_hall_div").html("");
+                        $content.append($firstTR);
+                        halls.forEach(function (hall) {
+                            let $tr = $("<tr>"),
+                                $tdNumb = $("<td>").text(hall.numb),
+                                $tdPlaceCount = $("<td>").text(hall.placeCount),
+                                $tdRowCount = $("<td>").text(hall.rowCount),
+                                $tdShow = $("<td>").attr("href", hall._id).text("Просмотр");
+                            $tdShow.addClass("show_hall");
+                            console.log("hall.numb: ", hall.numb);
+                            $tdShow.on("click", function () {
+                                let $table = $("<table>").addClass("show_hall"),
+                                    value = 0,
+                                    $progress = $("<progress>").addClass("progress_hall").attr("max", hall.placeCount).attr("value", value);
+                                $(".progress_hall").remove();
+                                $(".content").append($progress);
+                                $.getJSON("" + hall._id + "/rows.json", function (rows) {
+                                    for (let i = 1; i <= hall.rowCount; i++) {
+                                        rows.forEach(function (row) {
+                                            if (row.number === i) {
+                                                let $row = $("<tr>").addClass("row_hall");
+                                                $.getJSON("places/" + row._id + "/places.json", function (places) {
+                                                    console.log(places);
+                                                    for (let j = 1; j <= row.placeCount; j++) {
+                                                        places.forEach(function (place) {
+                                                            if (place.number === j) {
+                                                                console.log(place.price);
+                                                                let $td = $("<td>").addClass("place_show"),
+                                                                    $inTd = $("<input>").val(place.price);
+                                                                $td.append($inTd);
+                                                                $td.toggleClass(place.reservation ? 'td_booked' : 'td_free');
+                                                                $inTd.change(function () {
+                                                                    let price = $(this).val(),
+                                                                        id = place._id;
+                                                                    $.ajax({
+                                                                        url : "/places/" + id,
+                                                                        type : "PUT",
+                                                                        data : {
+                                                                            "price" : price
+                                                                        }
+                                                                    }).done(function (response) {
+                                                                        console.log(response);
+                                                                    }).fail(function (err) {
+                                                                        console.log(err);
+                                                                    });
+                                                                });
+                                                                value++;
+                                                                $progress.attr("value", value);
+                                                                $row.append($td);
+                                                            }
+                                                        });
+                                                    }
+                                                });
+                                                $table.append($row);
+                                            }
+                                        });
+                                    }
+                                });
+
+                                $(".show_hall_div").html("").append($table);
+                            });
+                            $tr.append($tdNumb)
+                                .append($tdPlaceCount)
+                                .append($tdRowCount)
+                                .append($tdShow);
+                            $content.append($tr);
+                        });
+                        callback(null, $content);
+                    });
+                }
+            })
             for (let tab of tabs)
                 tabFunc(tab, callback);
         }

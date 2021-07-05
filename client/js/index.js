@@ -13,8 +13,8 @@ let main = function () {
                     $film_name = $("<a>").addClass("film_name")
                         .text(film.name)
                         .attr("href", "/film.html?filmID=" + film._id),
-                    $film_rating = $("<a>").addClass("film_rating")
-                        .text(film.rating),
+                    $film_rating = $("<a>").addClass("film_age")
+                        .text(film.age + "+"),
                     $desc = $("<div>").addClass("description")
                         .append($film_name)
                         .append($film_rating);
