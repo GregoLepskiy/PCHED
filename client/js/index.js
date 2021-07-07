@@ -28,10 +28,13 @@ let main = function () {
 };
 
 $("document").ready(function () {
-    let params = window.location.pathname.split('/');
-    if (params.length > 2)
-        $("#regisHref").attr("href", "/index.html").text("Выход");
+    console.log($.cookie("email"));
+    if ($.cookie("email") !== undefined)
+        $("#regisHref").attr("href", "#").text("Выход").click(function () {
+            $.removeCookie("email");
+            window.location.reload();
+        });
     else
-        $("#regisHref").attr("href", "/regis.html").text("Регистрация|Вход");
+        $("#regisHref").attr("href", "/auth.html").text("Регистрация|Вход");
     main();
 });

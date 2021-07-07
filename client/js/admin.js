@@ -1316,4 +1316,17 @@ let main = function () {
     });
 };
 
-$("document").ready(main);
+$("document").ready(function () {
+    console.log($.cookie("email"));
+    if ($.cookie("email") === "Nutella")
+        $("#regisHref").attr("href", "#").text("Выход").click(function () {
+            console.log($.cookie("email"));
+            $.removeCookie("email");
+            console.log($.cookie("email"));
+            window.location.reload();
+        });
+    else {
+        window.location.replace("/index.html");
+    }
+    main();
+});

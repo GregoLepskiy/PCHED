@@ -8,7 +8,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Old+Standard+TT:wght@700&display=swap" rel="stylesheet">
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-  <script src="js/regis.js"></script>
+  <script type="text/javascript" src="js/cookie.js"></script>
+  <script src="js/auth.js"></script>
   <title>Pipiska</title>
 </head>
 <body>
@@ -24,7 +25,7 @@
           <td><div class="left_unit">Логин</div><div class="right_unit" id="login_tip"></div></td>
         </tr>
         <tr>
-          <td><input id="identificator"></td>
+          <td><input id="identifier"></td>
         </tr>
         <tr>
           <td><div class="left_unit">Пароль (для Администратора)</div><div class="right_unit" id="password_tip"></div></td>
@@ -35,8 +36,8 @@
       </table>
       <table class="buttons">
         <tr>
-          <td><div class="logUp_button"><a id="common_user" href="index.html">как Сотрудник</a></div></td>
-          <td><div class="logUp_button"><a id="administrator" href="index.html">как Администратор</a></div></td>
+          <td><div class="logUp_button"><a id="common_user">как Сотрудник</a></div></td>
+          <td><div class="logUp_button"><a id="administrator" href="admin.html">как Администратор</a></div></td>
         </tr>
       </table>
     </div>

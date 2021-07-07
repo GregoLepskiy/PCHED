@@ -140,4 +140,14 @@ let main = function () {
     });
 };
 
-$("document").ready(main);
+$("document").ready(function () {
+    console.log($.cookie("email"));
+    if ($.cookie("email") !== undefined)
+        $("#regisHref").attr("href", "#").text("Выход").click(function () {
+            $.removeCookie("email");
+            window.location.reload();
+        });
+    else
+        $("#regisHref").attr("href", "/auth.html").text("Регистрация|Вход");
+    main();
+});
