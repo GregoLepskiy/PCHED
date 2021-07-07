@@ -27,4 +27,11 @@ let main = function () {
     });
 };
 
-$("document").ready(main);
+$("document").ready(function () {
+    let params = window.location.pathname.split('/');
+    if (params.length > 2)
+        $("#regisHref").attr("href", "/index.html").text("Выход");
+    else
+        $("#regisHref").attr("href", "/regis.html").text("Регистрация|Вход");
+    main();
+});

@@ -696,7 +696,7 @@ let main = function () {
                                 $.post("rows", newRow, function (row) {
                                     console.log(row);
                                     for (let j = 1; j <= placeRowCount; j++) {
-                                        let reservation = false,
+                                        let reservation = {},
                                             placeNumb = j,
                                             price = $("#mpp" + (rowNumb - 1) + "" + j).data("price"),
                                             rowID = row._id,

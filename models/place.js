@@ -2,7 +2,12 @@ let mongoose = require("mongoose"),
     ObjectID = mongoose.Schema.Types.ObjectId,
     PlaceSchema = mongoose.Schema({
         price : Number,
-        reservation : Boolean,
+        reservation : [
+            {
+                session: ObjectID,
+                res: Boolean
+            }
+        ],
         number : Number,
         rowID : ObjectID
     }),

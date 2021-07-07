@@ -62,21 +62,26 @@ HallController.destroy = function (req, res) {
     let id = req.params.id;
     Hall.find({"_id" : id}, function (err, result) {
         if (err) res.status(500).json(err);
-        else if (result.length !== 0)
-            Row.deleteMany({"hallID" : result[0]._id},
-                function (err, row) {
+        else if (result.length !== 0) {
+            Row.find({"hallID": id},
+                function (err, rows) {
+                    if (err) res.status(500).json(err);
+                    rows.forEach(function (row) {
+                        Place.deleteMany({"rowID": row._id}, function (err, placeRes) {
+                            console.log(placeRes);
+                        });
+                    });
+                });
+            Row.deleteMany({"hallID": result[0]._id},
+                function (err, rows) {
                     if (err) res.status(500).json(err);
                     else {
-                        Place.deleteMany({"rowID": row._id},
-                            function (err, place) {
-                                console.log(place);
-                            });
                         Session.deleteMany({
                             "hallID": id
                         }, function (err, session) {
                             console.log(session);
                         });
-                        Hall.deleteOne({"_id" : id},
+                        Hall.deleteOne({"_id": id},
                             function (err, hall) {
                                 if (err) res.status(500).json(err);
                                 else {
@@ -87,6 +92,7 @@ HallController.destroy = function (req, res) {
                             });
                     }
                 });
+        }
         else res.status(404).send("NOT FOUND");
     });
 };

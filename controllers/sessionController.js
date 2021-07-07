@@ -1,6 +1,8 @@
 let Session = require("../models/session"),
     Film = require("../models/film"),
     Hall = require("../models/hall"),
+    Place = require("../models/place"),
+    Row = require("../models/row"),
     SessionController = {};
 
 SessionController.index = function (req, res) {
@@ -69,16 +71,34 @@ SessionController.create = function (req, res) {
                 res.status(404).json("FILM NOT FOUND");
                 return;
             }
-            Hall.find({"_id" : hallID}, function (err, result) {
+            Hall.find({"_id" : hallID}, function (err, hallResult) {
                 if (err) res.status(500).json(err);
                 else {
-                    if (result.length === 0) {
+                    if (hallResult.length === 0) {
                         res.status(404).json("HALL NOT FOUND");
                         return;
                     }
                     newSession.save(function (err, result) {
                         if (err) res.status(500).json(err);
-                        else res.status(200).json(result);
+                        else {
+                            console.log(result);
+                            Row.find({"hallID" : hallResult[0]._id}, function (err, rowResult) {
+                                rowResult.forEach(function (row) {
+                                    Place.updateMany({"rowID" : row._id}, {
+                                        $push: {
+                                            "reservation": {
+                                                "session": result._id,
+                                                "res": false
+                                            }
+                                        }
+                                    }, function (err, placeResult) {
+                                        if (err) res.status(500).json(err);
+                                        console.log(placeResult);
+                                    });
+                                });
+                            });
+                            res.status(200).json(result);
+                        }
                     });
                 }
             });
@@ -89,6 +109,23 @@ SessionController.create = function (req, res) {
 SessionController.destroy = function (req, res) {
     console.log(this.name);
     let id = req.params.id;
+    Place.updateMany({
+            "reservation": {
+                $elemMatch : {
+                    "session" : id
+                }
+            }
+        },
+        {
+            $pull : {
+                "reservation" : {
+                    "session" : id
+                }
+            }
+        }, function (err, result) {
+            if (err) res.status(500).json(err);
+            console.log(result);
+        });
     Session.deleteOne({
         "_id" : id
     }, function (err, session) {
