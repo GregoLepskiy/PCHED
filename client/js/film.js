@@ -24,7 +24,65 @@ let main = function () {
                 $sessionTime.text(session.time);
                 $content.append($sessionTime);
                 $sessionTime.on("click", function () {
-
+                    let hall;
+                    $.getJSON("halls.json", function (halls) {
+                        halls.forEach(function (haller) {
+                            if (haller._id === session.hallID) hall = haller;
+                        });
+                        let $table = $("<table>").addClass("show_hall");
+                        $.getJSON("" + hall._id + "/rows.json", function (rows) {
+                            for (let i = 1; i <= hall.rowCount; i++) {
+                                rows.forEach(function (row) {
+                                    if (row.number === i) {
+                                        let $row = $("<tr>").addClass("row_hall");
+                                        $.getJSON("places/" + row._id + "/places.json", function (places) {
+                                            console.log(places);
+                                            for (let j = 1; j <= row.placeCount; j++) {
+                                                places.forEach(function (place) {
+                                                    if (place.number === j) {
+                                                        console.log(place.price);
+                                                        let $td = $("<td>").addClass("place_show"),
+                                                            session_num, res;
+                                                        for (let ses = 0; ses < place.reservation.length; ses++)
+                                                            if (place.reservation[ses].session === session._id) {
+                                                                session_num = ses;
+                                                                res = place.reservation[ses].res;
+                                                            }
+                                                        if (res) {
+                                                            $td.text(place.price);
+                                                            $td.toggleClass('td_booked');
+                                                        } else {
+                                                            let $place_but = $("<button>").addClass("place_but").text(place.price)
+                                                                .toggleClass('td_free').data("place_id", place._id);
+                                                            $td.append($place_but).toggleClass('td_free');
+                                                            $place_but.on("click", function () {
+                                                                $.ajax({
+                                                                    url : "/place/" + place._id + "/" + session._id,
+                                                                    type : "PUT",
+                                                                    data : {
+                                                                        "res" : true
+                                                                    }
+                                                                }).done(function (response) {
+                                                                    console.log(response);
+                                                                }).fail(function (err) {
+                                                                    console.log(err);
+                                                                });
+                                                                $(this).removeClass('td_free').toggleClass('td_booked');
+                                                                $td.removeClass('td_free').toggleClass('td_booked');
+                                                            });
+                                                        }
+                                                        $row.append($td);
+                                                    }
+                                                });
+                                            }
+                                        });
+                                        $table.append($row);
+                                    }
+                                });
+                            }
+                        });
+                        $(".show_hall_div").html("").append($table);
+                    });
                 });
             });
             callback(null, $content);

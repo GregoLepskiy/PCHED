@@ -68,6 +68,33 @@ PlaceController.update = function (req, res) {
         });
 };
 
+PlaceController.updateReservation = function (req, res) {
+    console.log(this.name);
+    let id = req.params.id,
+        sessionID = req.params.session,
+        newPlaceData = {
+            $set: {
+                "reservation.$.res" : req.body.res
+            }
+        };
+    Place.updateOne({
+        "_id" : id,
+        "reservation": {
+            $elemMatch: {
+                "session": sessionID
+            }
+        }
+    }, newPlaceData, function (err, place) {
+        if (err) res.status(500).json(err);
+        else {
+            if (place.n === 1 && place.nModified === 1 && place.ok === 1) {
+                console.log("CHANGED");
+                res.status(200).json(place);
+            } else res.status(404).json("NOT FOUND");
+        }
+    });
+};
+
 //TODO: placeController
 
 module.exports = PlaceController;

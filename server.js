@@ -59,3 +59,4 @@ app.put("/films/:id", filmsController.update);
 app.put("/workers/:id", workersController.update);
 app.put("/sessions/:id", sessionsController.update);
 app.put("/places/:id", placesController.update);
+app.put("/place/:id/:session", placesController.updateReservation);
