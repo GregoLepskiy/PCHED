@@ -12,6 +12,24 @@ let main = function () {
             });
         }
 
+        function session_tab_func (sessions, callback) {
+            let $content = $("<div>").addClass("sessions_content");
+            sessions.sort(function (a, b) {
+                if (a.time > b.time) return 1;
+                else if (b.time > a.time) return -1;
+                else return 0;
+            });
+            sessions.forEach(function (session) {
+                let $sessionTime = $("<button>").addClass("session_but");
+                $sessionTime.text(session.time);
+                $content.append($sessionTime);
+                $sessionTime.on("click", function () {
+
+                });
+            });
+            callback(null, $content);
+        }
+
         init(function (film, sessions) {
             let tabs = [];
             $("title").text(film.name);
@@ -48,18 +66,7 @@ let main = function () {
                     return result;
                 },
                 "content" : function (callback) {
-                    let $content = $("<div>").addClass("sessions_content");
-                    sessions.sort(function (a, b) {
-                        if (a.time > b.time) return 1;
-                        else if (b.time > a.time) return -1;
-                        else return 0;
-                    });
-                    sessions.forEach(function (session) {
-                        let $sessionTime = $("<button>").addClass("session_but");
-                        $sessionTime.text(session.time);
-                        $content.append($sessionTime);
-                    });
-                    callback(null, $content);
+                    session_tab_func(sessions, callback);
                 }
             });
             tabs.push({
@@ -77,18 +84,7 @@ let main = function () {
                     return result;
                 },
                 "content" : function (callback) {
-                    let $content = $("<div>").addClass("sessions_content");
-                    sessions.sort(function (a, b) {
-                        if (a.time > b.time) return 1;
-                        else if (b.time > a.time) return -1;
-                        else return 0;
-                    });
-                    sessions.forEach(function (session) {
-                        let $sessionTime = $("<button>").addClass("session_but");
-                        $sessionTime.text(session.time);
-                        $content.append($sessionTime);
-                    });
-                    callback(null, $content);
+                    session_tab_func(sessions, callback);
                 }
             });
             tabs.push({
@@ -106,18 +102,7 @@ let main = function () {
                     return result;
                 },
                 "content" : function (callback) {
-                    let $content = $("<div>").addClass("sessions_content");
-                    sessions.sort(function (a, b) {
-                        if (a.time > b.time) return 1;
-                        else if (b.time > a.time) return -1;
-                        else return 0;
-                    });
-                    sessions.forEach(function (session) {
-                        let $sessionTime = $("<button>").addClass("session_but");
-                        $sessionTime.text(session.time);
-                        $content.append($sessionTime);
-                    });
-                    callback(null, $content);
+                    session_tab_func(sessions, callback);
                 }
             });
             tabs.forEach(function (tab) {

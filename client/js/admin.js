@@ -1318,13 +1318,14 @@ let main = function () {
 
 $("document").ready(function () {
     console.log($.cookie("email"));
+    $("#regisHref").click(function () {
+        console.log($.cookie("email"));
+        $.removeCookie("email");
+        console.log($.cookie("email"));
+        window.location.reload();
+    });
     if ($.cookie("email") === "Nutella")
-        $("#regisHref").attr("href", "#").text("Выход").click(function () {
-            console.log($.cookie("email"));
-            $.removeCookie("email");
-            console.log($.cookie("email"));
-            window.location.reload();
-        });
+        $("#regisHref").attr("href", "#").text("Выход");
     else {
         window.location.replace("/index.html");
     }

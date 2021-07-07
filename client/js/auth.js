@@ -28,7 +28,7 @@ let main = function () {
                         window.location.replace("index.html");
                     }
                 });
-                if (!check) alert("ERROR");
+                if (!check) window.location.replace("regis.html");
             });
         });
     });
