@@ -207,21 +207,26 @@ let main = function () {
                                     surname = $inSurname.val(),
                                     telephone = $inTelephone.val(),
                                     birthDate = $inBirthDate.val();
-                                $.ajax({
-                                    url: "/clients/" + email,
-                                    type: "PUT",
-                                    data: {
-                                        "name": name,
-                                        "surname": surname,
-                                        "telephone": telephone,
-                                        "regisDate": client.regisDate,
-                                        "birthDate": birthDate
-                                    }
-                                }).done(function (response) {
-                                    console.log(response);
-                                }).fail(function (err) {
-                                    console.log(err);
-                                });
+                                if (help_val(name) &&
+                                help_val(surname) &&
+                                help_val(telephone) &&
+                                help_val(birthDate)) {
+                                    $.ajax({
+                                        url: "/clients/" + email,
+                                        type: "PUT",
+                                        data: {
+                                            "name": name,
+                                            "surname": surname,
+                                            "telephone": telephone,
+                                            "regisDate": client.regisDate,
+                                            "birthDate": birthDate
+                                        }
+                                    }).done(function (response) {
+                                        console.log(response);
+                                    }).fail(function (err) {
+                                        console.log(err);
+                                    });
+                                }
                             });
                             $tr.append($tdName)
                                 .append($tdSurname)
@@ -936,14 +941,17 @@ let main = function () {
                         let film = $(".film_i option:selected").val(),
                             hall = $(".hall_i option:selected").val(),
                             time = $(".time_i").val(),
+                            newCreation;
+                        if (help_val(time)) {
                             newCreation = ({
-                                "filmID" : film,
-                                "hallID" : hall,
-                                "time" : time
+                                "filmID": film,
+                                "hallID": hall,
+                                "time": time
                             });
-                        $.post("sessions", newCreation, function (result) {
-                            console.log(result);
-                        });
+                            $.post("sessions", newCreation, function (result) {
+                                console.log(result);
+                            });
+                        }
                     });
                     $.getJSON("films.json", function (films) {
                         $.getJSON("halls.json", function (halls){
@@ -1054,17 +1062,19 @@ let main = function () {
                                     $accept.click(function () {
                                         let time = $inTime.val(),
                                             id = $TR.data("id");
-                                        $.ajax({
-                                            url : "/sessions/" + id,
-                                            type : "PUT",
-                                            data : {
-                                                "time" : time
-                                            }
-                                        }).done(function (response) {
-                                            console.log(response);
-                                        }).fail(function (err) {
-                                            console.log(err);
-                                        })
+                                        if (help_val(time)) {
+                                            $.ajax({
+                                                url: "/sessions/" + id,
+                                                type: "PUT",
+                                                data: {
+                                                    "time": time
+                                                }
+                                            }).done(function (response) {
+                                                console.log(response);
+                                            }).fail(function (err) {
+                                                console.log(err);
+                                            });
+                                        }
                                     });
                                     $TR.append($tdHall)
                                         .append($tdFilm)
@@ -1259,22 +1269,28 @@ let main = function () {
                                     role = $inRole.val(),
                                     salary = $inSalary.val(),
                                     id = $tr.data("id");
-                                $.ajax({
-                                    url : "/workers/" + id,
-                                    type : "PUT",
-                                    data : {
-                                        "name" : name,
-                                        "surname" : surname,
-                                        "patronymic" : patronymic,
-                                        "position" : position,
-                                        "role" : role,
-                                        "salary" : salary
-                                    }
-                                }).done(function (response) {
-                                    console.log(response);
-                                }).fail(function (err) {
-                                    console.log(err);
-                                })
+                                if (help_val(name) &&
+                                help_val(surname) &&
+                                help_val(patronymic) &&
+                                help_val(position) &&
+                                help_val(role)) {
+                                    $.ajax({
+                                        url: "/workers/" + id,
+                                        type: "PUT",
+                                        data: {
+                                            "name": name,
+                                            "surname": surname,
+                                            "patronymic": patronymic,
+                                            "position": position,
+                                            "role": role,
+                                            "salary": salary
+                                        }
+                                    }).done(function (response) {
+                                        console.log(response);
+                                    }).fail(function (err) {
+                                        console.log(err);
+                                    });
+                                }
                             });
                             $tr.append($tdSurname)
                                 .append($tdName)

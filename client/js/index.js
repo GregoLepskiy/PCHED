@@ -3,6 +3,26 @@ let main = function () {
     let help_val = function (word) {
             return (word !== "" && word.trim() !== "");
         },
+        film_showing = function (film) {
+            let $film = $("<div>").addClass("film_main"),
+                $img = $("<img>").addClass("film_img")
+                    .attr("src", film.poster)
+                    .attr("alt", film.name)
+                    .attr("href", "/film.html?filmID=" + film._id),
+                $img_div = $("<div>").addClass("film_img_div")
+                    .append($img),
+                $film_name = $("<a>").addClass("film_name")
+                    .text(film.name)
+                    .attr("href", "/film.html?filmID=" + film._id),
+                $film_rating = $("<a>").addClass("film_age")
+                    .text(film.age + "+"),
+                $desc = $("<div>").addClass("description")
+                    .append($film_name)
+                    .append($film_rating);
+            $film.append($img_div)
+                .append($desc);
+            return $film;
+        },
         btn_func = function () {
             let filmer = $("#search_index").val();
             if (help_val(filmer)) {
@@ -12,24 +32,7 @@ let main = function () {
                 $.getJSON("films.json", function (films) {
                     films.forEach(function (film) {
                         if (film.name.toLowerCase().includes(filmer.toLowerCase())) {
-                            let $film = $("<div>").addClass("film_main"),
-                                $img = $("<img>").addClass("film_img")
-                                    .attr("src", film.poster)
-                                    .attr("alt", film.name)
-                                    .attr("href", "/film.html?filmID=" + film._id),
-                                $img_div = $("<div>").addClass("film_img_div")
-                                    .append($img),
-                                $film_name = $("<a>").addClass("film_name")
-                                    .text(film.name)
-                                    .attr("href", "/film.html?filmID=" + film._id),
-                                $film_rating = $("<a>").addClass("film_age")
-                                    .text(film.age + "+"),
-                                $desc = $("<div>").addClass("description")
-                                    .append($film_name)
-                                    .append($film_rating);
-                            $film.append($img_div)
-                                .append($desc);
-                            $content.append($film);
+                            $content.append(film_showing(film));
                         }
                     });
                     $(".content").html("").text(filmer).append($content);
@@ -53,24 +56,7 @@ let main = function () {
         let $content = $("<div>").addClass("films");
         $.getJSON("films.json", function (films) {
             films.forEach(function (film) {
-                let $film = $("<div>").addClass("film_main"),
-                    $img = $("<img>").addClass("film_img")
-                        .attr("src", film.poster)
-                        .attr("alt", film.name)
-                        .attr("href", "/film.html?filmID=" + film._id),
-                    $img_div = $("<div>").addClass("film_img_div")
-                        .append($img),
-                    $film_name = $("<a>").addClass("film_name")
-                        .text(film.name)
-                        .attr("href", "/film.html?filmID=" + film._id),
-                    $film_rating = $("<a>").addClass("film_age")
-                        .text(film.age + "+"),
-                    $desc = $("<div>").addClass("description")
-                        .append($film_name)
-                        .append($film_rating);
-                $film.append($img_div)
-                    .append($desc);
-                $content.append($film);
+                $content.append(film_showing(film));
             });
             $(".content").append($content);
         });
